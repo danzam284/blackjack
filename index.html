@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <span id="lolol" hidden><%= user %></span>
+        <link rel="stylesheet" href="style/board.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="images/chip.png">
+        
+        <title>Blackjack</title>
+    </head>
+    <body>
+        <img id="volume" src="images/unmute.png">
+        <img id="leader" src="images/podium.png">
+        <div id="dealerCards">
+        </div>
+        
+        <div id="playerCards">
+        </div>
+    </body>
+    <button id="deal">
+        <img class="buttonImage" src="images/deal.png">
+        Deal
+    </button>
+    <button id="hit" hidden disabled>
+        <img class="buttonImage" src="images/hit.svg">
+        Hit
+    </button>
+    <span id="playerScore" hidden>??</span>
+    <button id="stay" hidden disabled>
+        <img class="buttonImage" src="images/stay.png">
+        Stay
+    </button>
+    <button id="doubledown" hidden disabled>
+        <img class="buttonImage" src="images/doubledown.svg">
+        Double Down
+    </button>
+    <button hidden id="bail">
+        <div>You're Broke</div>
+        <img style="width: 50px; height: 50px;" src="images/chip.png">
+        <div>Bail Out</div>
+    </button>
+    <span id="dealerScore" hidden>??</span>
+    <div id="chips">
+        <img id="chipsimg" src="images/chips.png">
+        <span id="chipscount">100</span>
+    </div>
+    <div id="info"></div>
+    <div id="range">
+        <span id="betText">Enter Bet</span>
+        <Input id="slider" class="range" type="range" value="10" min="1" max="1000" onChange="rangeSlide(this.value)" onmousemove="rangeSlide(this.value)"></Input>
+        <span id="betValue">0</span>
+    </div>
+
+    <div id="leaderboard">
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/dealCards.js"></script>
+    <script type="text/javascript" src="js/game.js"></script>
+</html>
