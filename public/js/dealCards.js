@@ -4,19 +4,23 @@ var cards = ["2C", "2D", "2H", "2S", "3C", "3D", "3H", "3S", "4C", "4D", "4H", "
 var playerHand = [];
 var dealerHand = [];
 
+//Returns a random card from remaining options
 function getRandomCard() {
     const index = Math.floor(Math.random() * cards.length);
     return cards.splice(index, 1)[0];
 }
 
+//Calculates where the card value text should be
 function calculateAnimation(n) {
     return ((window.innerWidth / 2) - (65 * n) - 65);
 }
 
+//Calculates where the card should go on each deal
 function calculateLeft(n) {
     return "calc(50% - " + (n * 65 + 100) + "px)";
 }
 
+//Calculates the value of a hand
 function calculateScore(deck) {
     const cardValues = {
         '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 'T': 10,
@@ -40,6 +44,7 @@ function calculateScore(deck) {
     return sum;
 }
 
+//Performs the initial deal
 async function dealCards() {
     document.getElementById("slider").disabled = true;
     document.getElementById("deal").hidden = true;
@@ -105,6 +110,7 @@ async function dealCards() {
     document.getElementById("doubledown").hidden = false;
 }
 
+//Used for pausing
 async function sleep(time) {
     return new Promise(resolve => {
         setTimeout(() => {
