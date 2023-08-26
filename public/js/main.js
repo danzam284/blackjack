@@ -13,6 +13,8 @@ if ((document.getElementById("lolol")).innerHTML != "&lt;%= msg %&gt;") {
 
 getUsers();
 let button = document.getElementById("switchButton");
+
+//Switches between sign up and login screen
 button.onclick = async function() {
 	//await getUsers();
 	let animationTimeout;
@@ -49,6 +51,7 @@ button.onclick = async function() {
 	}
 }
 
+//Checks if form is to be submitted
 function submitForm() {
 	if (document.getElementById("form").action.endsWith("/login")) {
 		return true;
@@ -72,6 +75,7 @@ function submitForm() {
 	}
 }
 
+//Gets list of users from database
 async function getUsers() {
 	const userJ = await fetch('/getUser');
 	userInfo = await userJ.json();
@@ -82,6 +86,7 @@ let username = document.getElementById("username");
 let validation = document.getElementById("form-validation");
 let validation2 = document.getElementById("user-validation");
 
+//Styling for inputs
 password.onfocus = function() {
 	if (document.getElementById("form").action.endsWith("/signup")) {
 		validation.style.display = "block";
@@ -101,6 +106,7 @@ username.onblur = function() {
 }
 
 var requirements;
+//Password requirements display
 password.onkeyup = function() {
 	requirements = 0
 	var lowerCaseLetters = /[a-z]/g;
