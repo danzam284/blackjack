@@ -17,6 +17,7 @@ document.getElementById("slider").max = chips;
 document.getElementById("slider").value = Math.min(10, chips);
 rangeSlide(Math.min(10, chips));
 
+//Initiates the game and prepares all variables
 document.getElementById("deal").onclick = async function() {
     play = true;
     this.disabled = true;
@@ -66,6 +67,7 @@ document.getElementById("deal").onclick = async function() {
     dealCards();
 }
 
+//Performs a hit for the user
 document.getElementById("hit").onclick = async function() {
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
@@ -103,6 +105,7 @@ document.getElementById("hit").onclick = async function() {
     }
 }
 
+//Performs a stay for the user
 document.getElementById("stay").onclick = async function() {
     document.getElementById("hit").disabled = true;
     document.getElementById("stay").disabled = true;
@@ -154,6 +157,7 @@ document.getElementById("stay").onclick = async function() {
     adjustBet();
 }
 
+//Performs a double down for the user
 document.getElementById("doubledown").onclick = async function() {
     this.disabled = true;
     document.getElementById('hit').disabled = true;
@@ -195,6 +199,7 @@ document.getElementById("doubledown").onclick = async function() {
     }
 }
 
+//Plays the card flip animation
 function flipCard() {
     flipSound.play();
     document.getElementById("flipped").className += " flip";
@@ -204,6 +209,7 @@ function flipCard() {
     document.getElementById("back").hidden = false;
 }
 
+//Toggles the volume and updates the database
 document.getElementById("volume").onclick = function() {
     if (this.src.endsWith("images/unmute.png")) {
         this.src = "images/mute.png";
@@ -221,10 +227,12 @@ document.getElementById("volume").onclick = function() {
     updateMuted();
 }
 
+//Updates the slider text value
 function rangeSlide(value) {
     document.getElementById('betValue').innerHTML = value;
 }
 
+//Updates the slider values
 function adjustBet() {
     document.getElementById("slider").min = Math.min(1, chips);
     document.getElementById("slider").max = chips;
@@ -237,12 +245,7 @@ function adjustBet() {
     }
 }
 
-document.getElementById("bail").onclick = async function() {
-    for (let i = 0; i < 10; i++) {
-
-    }
-}
-
+//Plays animation for winning chips
 async function winChips(n) {
     let amt = 0;
     if (n < 20) {
@@ -274,6 +277,7 @@ async function winChips(n) {
     document.getElementById("chipscount").innerHTML = chips;
 }
 
+//Plays animation for bail
 document.getElementById("bail").onclick = async function() {
     for (let i = 0; i < 10; i++) {
         let chip = document.createElement("img");
@@ -301,6 +305,7 @@ document.getElementById("bail").onclick = async function() {
     updateChips();
 }
 
+//Displays / Hides leaderboard 
 document.getElementById("leader").onclick = function() {
     lead = !lead;
     if (lead) {
@@ -310,6 +315,7 @@ document.getElementById("leader").onclick = function() {
     }
 }
 
+//Call to server to alter chip count
 function updateChips() {
     $.ajax ({
         type: "POST",
@@ -318,6 +324,7 @@ function updateChips() {
     });
 }
 
+//Call to server to get chip count
 function getChips() {
     $.ajax ({
         type: "GET",
@@ -337,6 +344,7 @@ function getChips() {
     });
 }
 
+//Call to server to alter mute status
 function updateMuted() {
     var muted = "unmuted";
     if (song.muted) {
@@ -349,6 +357,7 @@ function updateMuted() {
     });
 }
 
+//Call to server to get mute status
 function getMuted() {
     $.ajax({
         type: "GET",
@@ -373,6 +382,7 @@ function getMuted() {
     });
 }
 
+//Call to server to get leaderboard data
 function getLeaderboard() {
     $.ajax({
         type: "GET",
