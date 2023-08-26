@@ -6,6 +6,7 @@ const saltRounds = 10;
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy
 const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -18,13 +19,18 @@ app.engine('html', require('ejs').renderFile);
 app.set('trust proxy', true)
 app.use(express.static("public"));
 app.use(session({
+    store: new MemoryStore({
+        checkPeriod: 86400000
+    }),
     secret: "secret",
     resave: false ,
     saveUninitialized: true ,
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
+//Used to validate username/password combo
 authUser = (username, password, cb) => {
     db.get('SELECT * FROM users WHERE name = ?', [ username ], function(err, user) {
         if (err) { return cb(err); }
@@ -46,6 +52,9 @@ passport.serializeUser( (user, done) => {
 passport.deserializeUser((user, done) => {
     done (null, user)      
 });
+
+//Removes favicon error
+app.get('/favicon.ico', (req, res) => res.status(204));
 
 app.get("/login", (req, res) => {
     res.render(__dirname + "/login.html", {msg: "Incorrect username or password."});
@@ -77,7 +86,7 @@ db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS users (name TEXT, chips INT, muted TEXT, password TEXT)");
 });
 
-
+//Sets chips to proper number for user
 app.post("/updateChips", urlencodedParser, (req, res) => {
     const count = req.body.chips;
     const user = req.body.user;
@@ -92,6 +101,7 @@ app.post("/updateChips", urlencodedParser, (req, res) => {
     });
 });
 
+//Sends chip count to user
 app.get("/getChips", (req, res) => {
     const user = req.query.name;
     req.db.get("SELECT chips FROM users WHERE name = ?", [user], (err, row) => {
@@ -108,6 +118,7 @@ app.get("/getChips", (req, res) => {
     });
 });
 
+//Updates mute status for user
 app.post("/updateMuted", urlencodedParser, (req, res) => {
     const muted = req.body.muted;
     const user = req.body.user;
@@ -122,6 +133,7 @@ app.post("/updateMuted", urlencodedParser, (req, res) => {
     });
 });
 
+//Creates a new user in the database
 app.post("/signup", urlencodedParser, (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -141,6 +153,7 @@ app.post("/signup", urlencodedParser, (req, res) => {
     });
 });
 
+//Sends the user their mute status
 app.get("/getMuted", (req, res) => {
     const user = req.query.name;
     req.db.get("SELECT muted FROM users WHERE name = ?", [user], (err, row) => {
@@ -157,6 +170,7 @@ app.get("/getMuted", (req, res) => {
     });
 });
 
+//Sends the data for leaderboard formulation
 app.get("/viewLeaderboard", (req, res) => {
     req.db.all("SELECT name, chips FROM users ORDER BY chips DESC LIMIT 10", [], (err, rows) => {
         if (err) {
@@ -168,6 +182,7 @@ app.get("/viewLeaderboard", (req, res) => {
     });
 });
 
+//returns all users
 app.get("/getUser", (req, res) => {
     req.db.all("SELECT name FROM users", [], (err, rows) => {
         if (err) {
@@ -179,7 +194,7 @@ app.get("/getUser", (req, res) => {
     });
 });
 
-
+//Checks if a user exists
 function userExists(username) {
     req.db.get("SELECT name FROM users WHERE name = ?", [username], (err, row) => {
         if (err) {
