@@ -54,9 +54,17 @@ document.getElementById("deal").onclick = async function() {
     }
 
     document.getElementById("playerScore").hidden = false;
-    document.getElementById("playerScore").style.left = "calc(50% - 100px)";
+    if (cardWidth == 65) {
+        document.getElementById("playerScore").style.left = "calc(50% - 100px)";
+    } else {
+        document.getElementById("playerScore").style.right = "calc(50% - 35px)";
+    }
     document.getElementById("dealerScore").hidden = false;
-    document.getElementById("dealerScore").style.left = "calc(50% - 100px)";
+    if (cardWidth == 65) {
+        document.getElementById("dealerScore").style.left = "calc(50% - 100px)";
+    } else {
+        document.getElementById("dealerScore").style.right = "calc(50% - 35px)";
+    }
     document.getElementById("info").innerHTML = ""
     chips = prev - bet;
     document.getElementById("chipscount").innerHTML = chips;
@@ -81,7 +89,11 @@ document.getElementById("hit").onclick = async function() {
     document.getElementById("playerCards").appendChild(cardImage);
     cardSound.play();
     await sleep(1000);
-    document.getElementById("playerScore").style.left = calculateLeft(playerHand.length);
+    if (cardWidth == 65) {
+        document.getElementById("playerScore").style.left = calculateLeft(playerHand.length);
+    } else {
+        document.getElementById("playerScore").style.right = calculateLeft(playerHand.length);
+    }
     let score = calculateScore(playerHand);
     document.getElementById("playerScore").innerHTML = score;
 
@@ -125,8 +137,11 @@ document.getElementById("stay").onclick = async function() {
         document.getElementById("dealerCards").appendChild(cardImage);
         cardSound.play();
         await sleep(1000);
-        document.getElementById("dealerScore").style.left = calculateLeft(dealerHand.length);
-        document.getElementById("dealerScore").innerHTML = calculateScore(dealerHand);
+        if (cardWidth == 65) {
+            document.getElementById("dealerScore").style.left = calculateLeft(dealerHand.length);
+        } else {
+            document.getElementById("dealerScore").style.right = calculateLeft(dealerHand.length);
+        }
 
     }
     let dealerScore = calculateScore(dealerHand);
@@ -136,7 +151,11 @@ document.getElementById("stay").onclick = async function() {
 
     if (dealerScore > 21) {
         document.getElementById("info").innerHTML = "You win"
-        await winChips(2 * bet);
+        if (playerScore == 21 && playerHand.length == 2) { //Blackjack
+            await winChips(3 * bet);
+        } else {
+            await winChips(2 * bet);
+        }
     } else if (dealerScore == playerScore) {
         document.getElementById("info").innerHTML = "Draw"
         await winChips(bet);
