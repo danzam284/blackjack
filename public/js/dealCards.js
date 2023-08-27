@@ -1,6 +1,9 @@
 var cards = ["2C", "2D", "2H", "2S", "3C", "3D", "3H", "3S", "4C", "4D", "4H", "4S", "5C", "5D", "5H", "5S", "6C", "6D", "6H", "6S", "7C", "7D", "7H", "7S",
 "8C", "8D", "8H", "8S", "9C", "9D", "9H", "9S", "TC", "TD", "TH", "TS", "JC", "JD", "JH", "JS", "QC", "QD", "QH", "QS", "KC", "KD", "KH", "KS", "AC", "AD", "AH", "AS"];
-
+var cardWidth = 65;
+if (window.innerWidth <= 480) {
+    cardWidth = 35;
+}
 var playerHand = [];
 var dealerHand = [];
 
@@ -12,12 +15,16 @@ function getRandomCard() {
 
 //Calculates where the card value text should be
 function calculateAnimation(n) {
-    return ((window.innerWidth / 2) - (65 * n) - 65);
+    return ((window.innerWidth / 2) - (cardWidth * n) - cardWidth);
 }
 
 //Calculates where the card should go on each deal
 function calculateLeft(n) {
-    return "calc(50% - " + (n * 65 + 100) + "px)";
+    if (cardWidth == 65) {
+        return "calc(50% - " + (n * cardWidth + 100) + "px)";
+    } else {
+        return "calc(50% - " + (n * cardWidth + 35) + "px)";
+    }
 }
 
 //Calculates the value of a hand
@@ -97,8 +104,13 @@ async function dealCards() {
         }
         await sleep(1000);
         document.getElementById("playerScore").innerHTML = calculateScore(playerHand);
-        document.getElementById("playerScore").style.left = calculateLeft(playerHand.length);
-        document.getElementById("dealerScore").style.left = calculateLeft(dealerHand.length);
+        if (cardWidth == 65) {
+            document.getElementById("playerScore").style.left = calculateLeft(playerHand.length);
+            document.getElementById("dealerScore").style.left = calculateLeft(dealerHand.length);
+        } else {
+            document.getElementById("playerScore").style.right = calculateLeft(playerHand.length);
+            document.getElementById("dealerScore").style.right = calculateLeft(dealerHand.length);
+        }
     }
 
     if (calculateScore(playerHand) == 21) {
